@@ -4,7 +4,10 @@
   "description": "The backend of a phonebook task for the University of Helsinki Full stack course",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "build:ui": "@powershell Remove-Item -Recurse -Force build && cd ../Full_stack/Part_2/phonebook/ && npm run build && @powershell Copy-Item  build -Recurse ../../../part_3_phonebook_backend",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "Paul Wisdom",
   "license": "ISC",

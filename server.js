@@ -1,9 +1,10 @@
 const express = require('express');
 const {format} = require('date-fns');
 const morgan = require('morgan');
-
+const cors = require('cors');
+const path = require('path');
 morgan.token('data', (req, res) => {
-    if(req.method === 'POST')
+    if(req.method === 'POST' || req.method === 'PUT')
         {
             return JSON.stringify(req.body);
         }
@@ -11,6 +12,8 @@ morgan.token('data', (req, res) => {
 })
 
 const app = express();
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 app.use(express.json());
 
@@ -86,9 +89,16 @@ app.post('/api/persons', (req, res, next) => {
             return res.status(400).json({error: "name must be unique"})
         }
     data.push({id: id, name: name, number: num});
-    return res.json(data);
+    return res.json({id: id, name: name, number: num});
 });
 
+app.put('/api/persons/:id', (req, res, next) => {
+    const id = req.params.id;
+
+    const index = data.findIndex(c => c.id == id);
+    data[index].number = req.body.number;
+    res.json(data[index]);
+})
 app.get('/info', (req, res, next) => {
     const now = new Date();
     
