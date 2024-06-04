@@ -3,6 +3,9 @@ const {format} = require('date-fns');
 const morgan = require('morgan');
 const cors = require('cors');
 const path = require('path');
+
+const port = process.env.PORT || 3001;
+
 morgan.token('data', (req, res) => {
     if(req.method === 'POST' || req.method === 'PUT')
         {
@@ -106,6 +109,6 @@ app.get('/info', (req, res, next) => {
     res.send(`<p>Phonebook has info for ${data.length} people</p><p>${formattedDate}<p/>`)
 })
 
-app.listen(3001, () => {
-    console.log("Server is running on port 3001")
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
 })
